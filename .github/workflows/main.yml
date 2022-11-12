@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  Build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -35,12 +35,12 @@ jobs:
           ./pkg2appimage gitkraken.yml
           echo $PWD
 
-      - name: release
+      - name: Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
           title: Continuous build
           automatic_release_tag: continuous
           prerelease: false
           draft: false
-          files: GitKraken-*-x86_64.AppImage
+          files: /home/runner/work/gitkraken_AppImage/out/GitKraken-*-x86_64.AppImage
           repo_token: ${{ secrets.GITHUB_TOKEN }}
