@@ -11,6 +11,8 @@ ingredients:
 script:
   # - mkdir -p usr/share/pixmaps
   # - cp ../../gitkraken.png usr/share/pixmaps
+  - echo $PWD
+  - ls -al ; ls -al ../ ; ls -al ../../
   - cp ../../gitkraken.png .
   - cp ../../AppRun .
   - cp -r ../gitkraken/* .
