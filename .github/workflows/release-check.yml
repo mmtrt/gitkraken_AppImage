@@ -1,4 +1,4 @@
-name: check
+3: check
 
 on:
   schedule:
@@ -10,8 +10,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.PAT }}
+
     - name: get-latest-version
       run: |
         VERSION="$(wget -qO- https://www.gitkraken.com/download | grep "name: " | cut -d"'" -f2)"
