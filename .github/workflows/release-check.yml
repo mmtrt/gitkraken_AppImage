@@ -9,7 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.PATN }}
     - name: get-latest-version
       run: |
         VERSION="$(wget -qO- https://www.gitkraken.com/download | grep "name: " | cut -d"'" -f2)"
