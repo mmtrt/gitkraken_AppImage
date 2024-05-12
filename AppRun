@@ -40,9 +40,9 @@ atexit()
 {
   if [ $isEulaAccepted == 1 ] ; then
     if [ $NUMBER_OF_ARGS -eq 0 ] ; then
-      exec "$BIN"
+      exec "$BIN" --no-sandbox
     else
-      exec "$BIN" "${args[@]}"
+      exec "$BIN" --no-sandbox "${args[@]}"
     fi
   fi
 }
