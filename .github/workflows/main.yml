@@ -32,8 +32,19 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
-          sudo apt update && sudo apt install libfuse2 graphicsmagick-imagemagick-compat -y
+          sudo apt update && sudo apt install libfuse2 graphicsmagick-imagemagick-compat zsync -y
           ./pkg2appimage gitkraken.yml
+          export ARCH="$(uname -m)"
+          VERSION=$(wget -qO- https://www.gitkraken.com/download | grep "name: " | cut -d"'" -f2)
+          URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
+          URUNTIME_LITE="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-lite-$ARCH"
+          wget --retry-connrefused --tries=30 "$URUNTIME" -O ./uruntime
+          wget --retry-connrefused --tries=30 "$URUNTIME_LITE" -O ./uruntime-lite
+          chmod +x ./uruntime*
+          UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|continuous|*$ARCH.AppImage.zsync"
+          ./uruntime-lite --appimage-addupdinfo "$UPINFO"
+          ./uruntime --appimage-mkdwarfs -f --set-owner 0 --set-group 0 --no-history --no-create-timestamp --compression zstd:level=22 -S26 -B8 --header uruntime-lite -i ./GitKraken.AppDir -o ./gitkraken-"$VERSION"-"$ARCH".AppImage
+          zsyncmake *.AppImage -u *.AppImage
           echo $PWD
 
       - name: Release
@@ -43,5 +54,5 @@ jobs:
           automatic_release_tag: continuous
           prerelease: false
           draft: false
-          files: /home/runner/work/gitkraken_AppImage/out/GitKraken-*-x86_64.AppImage
+          files: /home/runner/work/gitkraken_AppImage/gitkraken_AppImage/*.AppImage*
           repo_token: ${{ secrets.GITHUB_TOKEN }}
