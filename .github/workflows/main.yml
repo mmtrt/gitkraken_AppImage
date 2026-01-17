@@ -37,7 +37,7 @@ jobs:
 
           export ARCH="$(uname -m)"
           export APPIMAGE_EXTRACT_AND_RUN=1
-          export URUNTIME_PRELOAD=1
+          export URUNTIME_PRELOAD=0
           UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|continuous|*$ARCH.AppImage.zsync"
           VERSION=$(wget -qO- https://www.gitkraken.com/download | grep "name: " | cut -d"'" -f2)
           APPIMAGETOOL="https://github.com/pkgforge-dev/appimagetool-uruntime/releases/download/continuous/appimagetool-x86_64.AppImage"
