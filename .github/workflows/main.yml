@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "test" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "test" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -19,51 +19,35 @@ jobs:
   Build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    container: ghcr.io/pkgforge-dev/archlinux:latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Runs a single command using the runners shell
-      - name: Download pkg2image
-        run: wget -q "https://github.com/$(wget -qO- https://github.com/AppImageCommunity/pkg2appimage/releases/expanded_assets/continuous | grep download/ | cut -d'"' -f2 | sed /aarch/d)" -O pkg2appimage ; chmod +x pkg2appimage
+      - name: Preparing Container
+        uses: pkgforge-dev/anylinux-setup-action@8872fabe63f9a00b35e25b2f46da62a05afc9a7d # v1
+
+      - name: Install dependencies
+        run: |
+          chmod +x ./get-dependencies.sh && ./get-dependencies.sh
 
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
-          sudo apt update && sudo apt install zsync libfuse2 graphicsmagick-imagemagick-compat zsync -y
-          ./pkg2appimage gitkraken.yml
-
-          export ARCH="$(uname -m)"
-          export APPIMAGE_EXTRACT_AND_RUN=1
-          UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|continuous|*$ARCH.AppImage.zsync"
-          VERSION=$(wget -qO- https://www.gitkraken.com/download | grep "name: " | cut -d"'" -f2)
-          URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
-          URUNTIME_LITE="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-lite-$ARCH"
-          wget --retry-connrefused --tries=30 "$URUNTIME" -O ./uruntime
-          wget --retry-connrefused --tries=30 "$URUNTIME_LITE" -O ./uruntime-lite
-          chmod +x ./uruntime*
-
-          # Keep the mount point (speeds up launch time)
-          sed -i 's|URUNTIME_MOUNT=[0-9]|URUNTIME_MOUNT=0|' ./uruntime-lite
-
-          # Add udpate info to runtime
-          echo "Adding update information \"$UPINFO\" to runtime..."
-          ./uruntime-lite --appimage-addupdinfo "$UPINFO"
-
-          echo "Generating AppImage..."
-          ./uruntime --appimage-mkdwarfs -f --set-owner 0 --set-group 0 --no-history --no-create-timestamp --compression zstd:level=22 -S26 -B8 --header uruntime-lite -i ./GitKraken.AppDir -o ./gitkraken-"$VERSION"-"$ARCH".AppImage
-
-          echo "Generating zsync file..."
-          zsyncmake *.AppImage -u *.AppImage
+          chmod +x ./make-appimage.sh && ./make-appimage.sh
           echo $PWD
+          echo $CWD
+          ls -al
+          ls -al ../
 
       - name: Release
         uses: marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303
         with:
-          title: Continuous build
-          automatic_release_tag: continuous
+          title: test build
+          automatic_release_tag: test
           prerelease: false
           draft: false
           files: /home/runner/work/gitkraken_AppImage/gitkraken_AppImage/*.AppImage*

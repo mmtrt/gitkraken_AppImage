@@ -1,0 +1,48 @@
+# Maintainer: Tim Kleinschmidt <tim.kleinschmidt@gmail.com>
+# Contributor: Marcin Wieczorek <marcin@marcin.co>
+# Contributor: Jean-Pier Brochu <jeanpier.brochu@gmail.com>
+# Contributor: Samuel Littley <samuel@samuellittley.me>
+# Contributor: KillWolfVlad <github.com/KillWolfVlad>
+# Contributor: Victor Hugo Souza <vhbsouza@gmail.com>
+# Contributor: William Penton <william@nexxuz.co>
+# Contributor: Jeff Moody <jeff@fifthecho.com>
+# Contributor: KokaKiwi <kokakiwi+aur@kokakiwi.net>
+# Contributor: iBernd81 <aur at gempel dot bayern>
+
+pkgname=gitkraken
+pkgrel=1
+pkgver=11.8.0
+pkgdesc="The intuitive, fast, and beautiful cross-platform Git client."
+url="https://www.gitkraken.com/"
+provides=('gitkraken')
+arch=('x86_64')
+license=('custom')
+depends=('nss' 'gtk3' 'libsecret' 'libxkbfile')
+optdepends=('git-lfs: git-lfs support'
+            'org.freedesktop.secrets: Provides ways to store passwords and encryption keys')
+makedepends=()
+backup=()
+install=''
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://api.gitkraken.dev/releases/production/linux/x64/${pkgver}/gitkraken-amd64.tar.gz"
+    "GitKraken.desktop"
+    "eula.html"
+    "gitkraken.sh"
+)
+sha256sums=('3e74cab2369f0089110d19e7a1beb1510cde2d8bcf3dbbeac61c1b9f34a7abc4'
+            '078fa2cdf6826d956bf73387fb2ef147b1aca5f4a7a3cb4be8c71e6105fc9c6c'
+            '5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6'
+            'c78ef86324946f856cc5c11549990722155a5e883dc94f92a95169c7ab5fb63e')
+options=('!strip' '!debug')
+
+package() {
+    install -d "$pkgdir"/opt
+    cp -R "$srcdir"/gitkraken "$pkgdir"/opt/gitkraken
+
+    install -d "$pkgdir"/usr/bin
+
+    install -D -m755 "./gitkraken.sh" "${pkgdir}/usr/bin/gitkraken"
+    install -D -m644 "./eula.html" "${pkgdir}/usr/share/licenses/${pkgname}/eula.html"
+    install -D -m644 "./GitKraken.desktop" "${pkgdir}/usr/share/applications/gitkraken.desktop"
+    install -D -m644 "$pkgdir/opt/gitkraken/gitkraken.png" "$pkgdir/usr/share/pixmaps/gitkraken.png"
+}
