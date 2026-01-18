@@ -7,16 +7,17 @@ ARCH=$(uname -m)
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
-	libdecor       \
-	pipewire-audio \
-	pipewire-jack  \
-	wayland
+	nss         \
+	libsecret   \
+	libxkbfile
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
-get-debloated-pkgs --add-common --prefer-nano intel-media-driver-mini
+get-debloated-pkgs --add-common --prefer-nano
 
 # Comment this out if you need an AUR package
 make-aur-package
 
 # If the application needs to be manually built that has to be done down here
+mkdir -p ./AppDir/bin
+cp -rv /opt/gitkraken/*               ./AppDir/bin
