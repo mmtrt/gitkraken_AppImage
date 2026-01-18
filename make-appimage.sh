@@ -15,7 +15,13 @@ export DEPLOY_VULKAN=1
 
 # Deploy dependencies
 quick-sharun \
-	./AppDir/bin/gitkraken
+	./AppDir/bin/gitkraken -- --no-sandbox
+
+quick-sharun \
+	./AppDir/bin/*.so* \
+	/usr/lib/libnss*   \
+	/usr/lib/pkcs11/*  \
+	/usr/lib/gio/modules/*
 
 # Additional changes can be done in between here
 
