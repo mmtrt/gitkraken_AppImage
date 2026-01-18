@@ -21,7 +21,8 @@ quick-sharun \
 	./AppDir/bin/*.so* \
 	/usr/lib/libnss*   \
 	/usr/lib/pkcs11/*  \
-	/usr/lib/gio/modules/*
+	/usr/lib/gio/modules/* \
+	/usr/lib/libsecret*
 
 # Additional changes can be done in between here
 
@@ -29,5 +30,7 @@ quick-sharun \
 wget -q https://github.com/pkgforge-dev/appimagetool-uruntime/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool ; chmod +x /usr/local/bin/appimagetool
 
 export APPIMAGE_EXTRACT_AND_RUN=1
+
+cp -rv /opt/gitkraken/resources ./AppDir/bin
 
 appimagetool --no-appstream -u "$UPINFO" AppDir "$OUTNAME"
