@@ -18,9 +18,10 @@ quick-sharun \
 	./AppDir/bin/gitkraken -- --no-sandbox
 
 quick-sharun \
-	./AppDir/bin/*.so* \
-	/usr/lib/libnss*   \
-	/usr/lib/pkcs11/*  \
+	./AppDir/bin/chrome*  \
+	./AppDir/bin/*.so*     \
+	/usr/lib/libnss*       \
+	/usr/lib/pkcs11/*      \
 	/usr/lib/gio/modules/* \
 	/usr/lib/libsecret*
 
