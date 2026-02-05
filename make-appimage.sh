@@ -32,6 +32,6 @@ wget -q https://github.com/pkgforge-dev/appimagetool-uruntime/releases/download/
 
 export APPIMAGE_EXTRACT_AND_RUN=1
 
-cp -rv /opt/gitkraken/resources ./AppDir/bin
+# cp -rv /opt/gitkraken/resources ./AppDir/bin
 
 appimagetool --no-appstream -u "$UPINFO" AppDir "$OUTNAME"

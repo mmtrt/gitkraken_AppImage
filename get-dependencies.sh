@@ -21,4 +21,4 @@ make-aur-package
 # If the application needs to be manually built that has to be done down here
 mkdir -p ./AppDir/bin
 cp -rv /opt/gitkraken/*               ./AppDir/bin
-rm -rf ./AppDir/bin/resources
+# rm -rf ./AppDir/bin/resources
