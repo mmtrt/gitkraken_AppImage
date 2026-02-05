@@ -3,7 +3,7 @@
 set -eu
 
 ARCH=$(uname -m)
-VERSION=$(wget -qO- https://www.gitkraken.com/download | grep "name: " | cut -d"'" -f2) # example command to get version of application here
+VERSION=$(wget -qO- https://www.gitkraken.com/download | grep -Eo "release: .*" | cut -d'<' -f1 | awk '{print $2}') # example command to get version of application here
 export ARCH VERSION
 export OUTNAME=gitkraken-"$VERSION"-"$ARCH".AppImage
 export ADD_HOOKS="self-updater.bg.hook"
