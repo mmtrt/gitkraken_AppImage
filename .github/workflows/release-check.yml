@@ -14,7 +14,7 @@ jobs:
         token: ${{ secrets.PATN }}
     - name: get-latest-version
       run: |
-        VERSION="$(wget -qO- https://www.gitkraken.com/download | grep "name: " | cut -d"'" -f2)"
+        VERSION="$(wget -qO- https://www.gitkraken.com/download | grep -Eo "release: .*" | cut -d'<' -f1 | awk '{print $2}')"
         last=$(tail -n1 .build | awk '{print $4}')
 
         if [ "$last" != "$VERSION" ]; then
