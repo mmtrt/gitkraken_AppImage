@@ -4,7 +4,7 @@ ingredients:
   script:
     - wget -c https://release.gitkraken.com/linux/gitkraken-amd64.tar.gz
     - tar zxvf gitkraken-amd64.tar.gz
-    - echo $(wget -qO- https://www.gitkraken.com/download | grep "name: " | cut -d"'" -f2) > ../VERSION
+    - echo $(wget -qO- https://help.gitkraken.com/gitkraken-desktop/current | grep -Eo "Version.*" | cut -d'<' -f1 | awk '{print $2}' | sed '/Now/d' | head -n1) > ../VERSION
     # - cp VERSION ../
     # - cp gitkraken.png GitKraken/usr/share/pixmaps
 
