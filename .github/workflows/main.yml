@@ -39,7 +39,7 @@ jobs:
           export APPIMAGE_EXTRACT_AND_RUN=1
           export URUNTIME_PRELOAD=0
           UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|continuous|*$ARCH.AppImage.zsync"
-          VERSION=$(wget -qO- https://www.gitkraken.com/download | grep -Eo "release: .*" | cut -d'<' -f1 | awk '{print $2}')
+          VERSION=$(wget -qO- https://help.gitkraken.com/gitkraken-desktop/current | grep -Eo "Version.*" | cut -d'<' -f1 | awk '{print $2}' | sed '/Now/d' | head -n1)
           APPIMAGETOOL="https://github.com/pkgforge-dev/appimagetool-uruntime/releases/download/continuous/appimagetool-x86_64.AppImage"
           wget --retry-connrefused --tries=30 "$APPIMAGETOOL" -O ./appimagetool
           chmod +x ./appimagetool*
