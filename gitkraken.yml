@@ -18,7 +18,7 @@ script:
   - cat > gitkraken.desktop << EOF
   - [Desktop Entry]
   - Name=GitKraken
-  - Exec=AppRun --no-sandbox %U
+  - Exec=AppRun %U
   - Icon=gitkraken
   - Terminal=false
   - Type=Application
